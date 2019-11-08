@@ -1,20 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
-
-[System.Serializable]
-public class Player {
-	public Image Panel;
-	public Text text;
-}
-
-[System.Serializable] // This is to allowed the fucntion to appear in unity such as vector3. same function
-public class PlayerColor {
-	public Color panelColor;
-	public Color textColor;
-}
-
-
+using System.Collections;
 
 public class GameController : MonoBehaviour {
 
@@ -22,27 +8,20 @@ public class GameController : MonoBehaviour {
 	public GameObject gameOverPanel;
 	public Text gameOverText;
 	public GameObject restartButton;
-	public Player playerX;
-	public Player playerO;
-	public PlayerColor activePlayerColor;
-	public PlayerColor innactivePlayerColor;
-
 
 	private string playerSide;
 	private int moveCount;
 
-
-	void Awake() //This is what code run in the start
+	void Awake ()
 	{
 		SetGameControllerReferenceOnButtons();
 		playerSide = "X";
-		gameOverPanel.SetActive(false); //To disable the game over panel during game start
+		gameOverPanel.SetActive(false);
 		moveCount = 0;
-		restartButton.SetActive(false); //To disable the play again button during game start
-		SetPlayerColors(playerX, playerO); // To set which player turn in color
+		restartButton.SetActive(false);
 	}
 
-	void SetGameControllerReferenceOnButtons()
+	void SetGameControllerReferenceOnButtons ()
 	{
 		for (int i = 0; i < buttonList.Length; i++)
 		{
@@ -50,15 +29,15 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	public string GetPlayerSide()
+	public string GetPlayerSide ()
 	{
 		return playerSide;
 	}
 
-
-	public void EndTurn()
+	public void EndTurn ()
 	{
 		moveCount++;
+
 		if (buttonList [0].text == playerSide && buttonList [1].text == playerSide && buttonList [2].text == playerSide)
 		{
 			GameOver(playerSide);
@@ -101,40 +80,21 @@ public class GameController : MonoBehaviour {
 
 		if (moveCount >= 9)
 		{
-			GameOver ("draw");
+			GameOver("draw");
 		}
 
 		ChangeSides();
+
 	}
 
-	void ChangeSides()
+	void ChangeSides ()
 	{
 		playerSide = (playerSide == "X") ? "O" : "X";
-		if(playerSide == "X")
-		{
-			SetPlayerColors(playerX, playerO);
-		} 
-		else 
-		{
-			SetPlayerColors(playerO, playerX);
-		}
 	}
 
-	void SetPlayersColors (Player newPlayer, Player oldPlayer)
-	{
-		newPlayer.panel.color = activePlayerColor.panelColor;
-		newPlayer.text.color = activePlayerColor.textColor;
-		oldPlayer.Panel.color = inactivePlayerColor.panelColor;
-		oldPlayer.text.color = inactivePlayerColor.textColor;
-
-	}
-
-
-	void GameOver(string winningPlayer)
+	void GameOver (string winningPlayer)
 	{
 		SetBoardInteractable(false);
-		//SetGameOverText (playerSide + " Wins!");
-		//restartButton.SetActive(true);
 		if (winningPlayer == "draw")
 		{
 			SetGameOverText("It's a Draw!");
@@ -144,7 +104,6 @@ public class GameController : MonoBehaviour {
 		}
 		restartButton.SetActive(true);
 	}
-
 
 	void SetGameOverText (string value)
 	{
@@ -157,22 +116,20 @@ public class GameController : MonoBehaviour {
 		playerSide = "X";
 		moveCount = 0;
 		gameOverPanel.SetActive(false);
-		SetBoardInteractable(true);
 		restartButton.SetActive(false);
-		SetPlayerColors(playerX, playerO);
+		SetBoardInteractable(true);
 
 		for (int i = 0; i < buttonList.Length; i++)
 		{
-			buttonList[i].text = "";
+			buttonList [i].text = "";
 		}
 	}
 
 	void SetBoardInteractable (bool toggle)
+	{
+		for (int i = 0; i < buttonList.Length; i++)
 		{
-			for (int i = 0; i < buttonList.Length; i++)
-			{
-				buttonList[i].GetComponentInParent<Button>().interactable = toggle;
-			}
-}
-
+			buttonList[i].GetComponentInParent<Button>().interactable = toggle;
+		}
 	}
+}
